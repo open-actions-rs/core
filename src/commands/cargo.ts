@@ -6,6 +6,8 @@ import * as exec from "@actions/exec";
 import * as http from "@actions/http-client";
 import * as io from "@actions/io";
 
+import type { CratesIO } from "../schema";
+
 export async function resolveVersion(crate: string): Promise<string> {
     const url = `https://crates.io/api/v1/crates/${crate}`;
     const client = new http.HttpClient("@actions-rs (https://github.com/actions-rs-plus/)");
