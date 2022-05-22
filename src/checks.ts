@@ -1,7 +1,5 @@
-import * as github from '@actions/github';
-
-// `@actions/github` does not re-export `GitHub` type, thanks for nothing.
-type GitHub = any;
+import * as github from "@actions/github";
+import type { GitHub } from "@actions/github/lib/utils";
 
 interface Output {
     title: string;
@@ -12,92 +10,71 @@ interface Output {
 /**
  * Thin wrapper around the GitHub Checks API
  */
-export class CheckReporter {
-    private readonly client: GitHub;
+export class Check {
+    private readonly client: InstanceType<typeof GitHub>;
     private readonly checkName: string;
-    private checkId: undefined | number;
+    private readonly checkId: number;
 
-    constructor(client: GitHub, checkName: string) {
+    private constructor(client: InstanceType<typeof GitHub>, checkName: string, checkId: number) {
         this.client = client;
         this.checkName = checkName;
-        this.checkId = undefined;
+        this.checkId = checkId;
     }
 
     /**
      * Starts a new Check and returns check ID.
      */
-    public async startCheck(
-        status?: 'queued' | 'in_progress' | 'completed',
-    ): Promise<number> {
+    public static async startCheck(client: InstanceType<typeof GitHub>, checkName: string, status: "completed" | "in_progress" | "queued" = "in_progress"): Promise<Check> {
         const { owner, repo } = github.context.repo;
 
-        const response = await this.client.checks.create({
-            owner: owner,
-            repo: repo,
-            name: this.checkName,
-            head_sha: github.context.sha, // eslint-disable-line
-            status: status ? status : 'in_progress',
+        const response = await client.rest.checks.create({
+            owner,
+            repo,
+            name: checkName,
+            head_sha: github.context.sha,
+            status,
         });
         // TODO: Check for errors
 
-        this.checkId = response.data.id;
-        return this.checkId!;
+        return new Check(client, checkName, response.data.id);
     }
-
     // TODO:
     //     public async sendAnnotations(annotations: Array<octokit.ChecksCreateParamsOutputAnnotations>): Promise<void> {
     //     }
 
-    /**
-     * It is up to caller to call the `startCheck` first!
-     */
-    public async finishCheck(
-        conclusion:
-            | 'cancelled'
-            | 'success'
-            | 'failure'
-            | 'neutral'
-            | 'timed_out'
-            | 'action_required',
-        output: Output,
-    ): Promise<void> {
+    public async finishCheck(conclusion: "action_required" | "cancelled" | "failure" | "neutral" | "success" | "timed_out", output: Output): Promise<void> {
         const { owner, repo } = github.context.repo;
 
         // TODO: Check for errors
-        await this.client.checks.update({
-            owner: owner,
-            repo: repo,
+        await this.client.rest.checks.update({
+            owner,
+            repo,
             name: this.checkName,
-            check_run_id: this.checkId!, // eslint-disable-line
-            status: 'completed',
-            conclusion: conclusion,
-            completed_at: new Date().toISOString(), // eslint-disable-line
-            output: output,
+            check_run_id: this.checkId,
+            status: "completed",
+            conclusion,
+            completed_at: new Date().toISOString(),
+            output,
         });
-
-        return;
     }
 
     public async cancelCheck(): Promise<void> {
         const { owner, repo } = github.context.repo;
 
         // TODO: Check for errors
-        await this.client.checks.update({
-            owner: owner,
-            repo: repo,
+        await this.client.rest.checks.update({
+            owner,
+            repo,
             name: this.checkName,
-            check_run_id: this.checkId!, // eslint-disable-line
-            status: 'completed',
-            conclusion: 'cancelled',
-            completed_at: new Date().toISOString(), // eslint-disable-line
+            check_run_id: this.checkId,
+            status: "completed",
+            conclusion: "cancelled",
+            completed_at: new Date().toISOString(),
             output: {
                 title: this.checkName,
-                summary: 'Unhandled error',
-                text:
-                    'Check was cancelled due to unhandled error. Check the Action logs for details.',
+                summary: "Unhandled error",
+                text: "Check was cancelled due to unhandled error. Check the Action logs for details.",
             },
         });
-
-        return;
     }
 }

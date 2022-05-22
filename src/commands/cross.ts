@@ -1,9 +1,10 @@
-import * as os from 'os';
-import * as io from '@actions/io';
-import * as core from '@actions/core';
-import * as exec from '@actions/exec';
+import * as os from "os";
 
-import { Cargo } from './cargo';
+import * as core from "@actions/core";
+import * as exec from "@actions/exec";
+import * as io from "@actions/io";
+
+import { Cargo } from "./cargo";
 
 export class Cross {
     private readonly path: string;
@@ -17,12 +18,12 @@ export class Cross {
             return await Cross.get();
         } catch (error) {
             core.debug(`${error}`);
-            return await Cross.install();
+            return Cross.install();
         }
     }
 
     public static async get(): Promise<Cross> {
-        const path = await io.which('cross', true);
+        const path = await io.which("cross", true);
 
         return new Cross(path);
     }
@@ -45,7 +46,7 @@ export class Cross {
         process.chdir(os.tmpdir());
 
         try {
-            const crossPath = await cargo.installCached('cross', version);
+            const crossPath = await cargo.installCached("cross", version);
             return new Cross(crossPath);
         } finally {
             // It is important to chdir back!
@@ -54,7 +55,7 @@ export class Cross {
         }
     }
 
-    public async call(args: string[], options?: {}): Promise<number> {
-        return await exec.exec(this.path, args, options);
+    public call(args: string[], options?: exec.ExecOptions): Promise<number> {
+        return exec.exec(this.path, args, options);
     }
 }

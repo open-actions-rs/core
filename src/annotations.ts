@@ -19,9 +19,9 @@
  * since switch to the sane GitHub implementation will use them later.
  */
 
-import * as os from 'os';
+import * as os from "os";
 
-export type AnnotationLevel = 'notice' | 'warning' | 'failure';
+export type AnnotationLevel = "failure" | "notice" | "warning";
 interface CommandProperties {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     [key: string]: any;
@@ -42,49 +42,37 @@ export interface Annotation {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function toCommandValue(input: any): string {
     if (input === null || input === undefined) {
-        return '';
-    } else if (typeof input === 'string' || input instanceof String) {
+        return "";
+    } else if (typeof input === "string" || input instanceof String) {
         return input as string;
     }
     return JSON.stringify(input);
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
 export function escapeData(s: any): string {
-    return toCommandValue(s)
-        .replace(/%/g, '%25')
-        .replace(/\r/g, '%0D')
-        .replace(/\n/g, '%0A');
+    return toCommandValue(s).replace(/%/g, "%25").replace(/\r/g, "%0D").replace(/\n/g, "%0A");
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
 export function escapeProperty(s: any): string {
-    return toCommandValue(s)
-        .replace(/%/g, '%25')
-        .replace(/\r/g, '%0D')
-        .replace(/\n/g, '%0A')
-        .replace(/:/g, '%3A')
-        .replace(/,/g, '%2C');
+    return toCommandValue(s).replace(/%/g, "%25").replace(/\r/g, "%0D").replace(/\n/g, "%0A").replace(/:/g, "%3A").replace(/,/g, "%2C");
 }
 
-const CMD_STRING = '::';
+const CMD_STRING = "::";
 
-function render(
-    level: 'warning' | 'error',
-    message: string,
-    properties?: CommandProperties,
-): string {
+function render(level: "error" | "warning", message: string, properties?: CommandProperties): string {
     let cmdStr = CMD_STRING + level;
 
     if (properties && Object.keys(properties).length > 0) {
-        cmdStr += ' ';
+        cmdStr += " ";
         let first = true;
         for (const [key, value] of Object.entries(properties)) {
             if (value) {
                 if (first) {
                     first = false;
                 } else {
-                    cmdStr += ',';
+                    cmdStr += ",";
                 }
 
                 cmdStr += `${key}=${escapeProperty(value)}`;
@@ -97,14 +85,14 @@ function render(
 }
 
 export function annotate(annotation: Annotation): void {
-    let level: 'warning' | 'error';
+    let level: "error" | "warning";
     switch (annotation.annotation_level) {
-        case 'notice':
-        case 'warning':
-            level = 'warning';
+        case "notice":
+        case "warning":
+            level = "warning";
             break;
-        case 'failure':
-            level = 'error';
+        case "failure":
+            level = "error";
             break;
     }
 
