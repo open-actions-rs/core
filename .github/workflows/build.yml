@@ -27,7 +27,7 @@ jobs:
       code: ${{ steps.filter.outputs.code }}
     steps:
       - name: Checkout
-        uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b
+        uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8
 
       - name: Check if we actually made changes
         uses: dorny/paths-filter@b2feaf19c27470162a626bd6fa8438ae5b263721
@@ -44,7 +44,7 @@ jobs:
     if: ${{ needs.changes.outputs.code == 'true' }}
     steps:
       - name: Check out code
-        uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b
+        uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8
 
       - name: Set up node
         uses: actions/setup-node@969bd2663942d722d85b6a8626225850c2f7be4b
@@ -67,7 +67,7 @@ jobs:
       - warm-up-cache
     steps:
       - name: Check out code
-        uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b
+        uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8
 
       - name: Set up node
         uses: actions/setup-node@969bd2663942d722d85b6a8626225850c2f7be4b
@@ -91,7 +91,7 @@ jobs:
       - warm-up-cache
     steps:
       - name: Check out code
-        uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b
+        uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8
 
       - name: Set up node
         uses: actions/setup-node@969bd2663942d722d85b6a8626225850c2f7be4b
@@ -123,7 +123,7 @@ jobs:
       - warm-up-cache
     steps:
       - name: Check out code
-        uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b
+        uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8
         with:
           fetch-depth: 0
 
@@ -172,7 +172,7 @@ jobs:
       - warm-up-cache
     steps:
       - name: Check out code
-        uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b
+        uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8
 
       - name: Set up node
         uses: actions/setup-node@969bd2663942d722d85b6a8626225850c2f7be4b
