@@ -140,7 +140,7 @@ export class RustUp {
     public async activeToolchain(): Promise<string> {
         const stdout = await this.callStdout(["show", "active-toolchain"]);
 
-        let split = stdout?.split(" ", 2)[0];
+        const split = stdout?.split(" ", 2)[0];
 
         if (split) {
             return split;
@@ -185,7 +185,7 @@ expected at least ${PROFILES_MIN_VERSION}`);
     public async version(): Promise<string> {
         const stdout = await this.callStdout(["-V"]);
 
-        let split = stdout?.split(" ")[1];
+        const split = stdout?.split(" ")[1];
 
         if (split) {
             return split;
