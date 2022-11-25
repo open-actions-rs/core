@@ -13,11 +13,16 @@
     ],
     "scripts": {
         "build": "tsc -p .",
+        "watch": "tsc -p . -w",
+        "lint": "eslint src --ext=ts,tsx",
+        "lint:fix": "npm run lint -- --fix",
         "format": "prettier --write \"src/**/*.ts\"",
-        "lint": "eslint \"src/**/*.ts\"",
         "refresh": "rm -rf ./dist/* && npm run build",
-        "test": "jest -c jest.config.json",
-        "watch": "tsc -p . -w"
+        "test": "jest --watchAll",
+        "test:ci": "jest",
+        "deps:ci": "depcruise --output-type err src",
+        "deps:graph": "depcruise --output-type dot src | dot -T svg > dependency-graph.svg",
+        "deps:report": "depcruise --output-type err-html --output-to dependency-report.html src"
     },
     "repository": {
         "type": "git",
