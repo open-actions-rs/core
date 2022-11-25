@@ -17,7 +17,7 @@
         "lint": "eslint src --ext=ts,tsx",
         "lint:fix": "npm run lint -- --fix",
         "format": "prettier --write \"src/**/*.ts\"",
-        "refresh": "rm -rf ./dist/* && npm run build",
+        "refresh": "rm -rf ./dist/* && rm tsconfig.tsbuildinfo && npm run build",
         "test": "jest --watchAll",
         "test:ci": "jest",
         "deps:ci": "depcruise --output-type err src",
