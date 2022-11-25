@@ -1,11 +1,12 @@
 {
     "private": false,
     "name": "@actions-rs-plus/core",
-    "version": "0.1.7",
+    "version": "0.1.8",
     "author": "actions-rs-plus",
     "license": "MIT",
     "description": "Core functionality for the @actions-rs-plus repos",
     "main": "dist/core.js",
+    "typings": "dist/core.d.ts",
     "files": [
         "dist/**/*.js",
         "dist/**/*.js.map",
@@ -17,7 +18,7 @@
         "lint": "eslint src --ext=ts,tsx",
         "lint:fix": "npm run lint -- --fix",
         "format": "prettier --write \"src/**/*.ts\"",
-        "refresh": "rm -rf ./dist/* && rm tsconfig.tsbuildinfo && npm run build",
+        "clean": "rm -rf ./dist/* && rm tsconfig.tsbuildinfo && npm run build",
         "test": "jest --watchAll",
         "test:ci": "jest",
         "deps:ci": "depcruise --output-type err src",
