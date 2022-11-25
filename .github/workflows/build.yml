@@ -60,6 +60,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           npm ci
+
   npm-build:
     name: Build the code
     runs-on: ubuntu-latest
@@ -84,6 +85,7 @@ jobs:
         shell: bash
         run: |
           npm run build
+
   npm-lint:
     name: Lint the code
     runs-on: ubuntu-latest
@@ -143,7 +145,7 @@ jobs:
           JEST_JUNIT_OUTPUT_DIR: reports/
           JEST_JUNIT_OUTPUT_NAME: unit-tests-report.xml
         run: |
-          npm run test -- --coverage --testLocationInResults --reporters=default --reporters=jest-junit
+          npm run test:ci -- --coverage --testLocationInResults --reporters=default --reporters=jest-junit
         continue-on-error: true
 
       - name: Upload unit-test results
@@ -165,6 +167,7 @@ jobs:
         run: |
           ./cc-test-reporter format-coverage coverage/lcov.info --input-type lcov --output reports/codeclimate.json
           ./cc-test-reporter upload-coverage --input reports/codeclimate.json
+
   npm-dependencies:
     name: Validate dependencies
     runs-on: ubuntu-latest
