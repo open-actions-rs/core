@@ -81,7 +81,7 @@ export class RustUp {
         }
 
         // `$HOME` should always be declared, so it is more to get the linters happy
-        core.addPath(path.join(process.env.HOME!, ".cargo", "bin")); // eslint-disable-line @typescript-eslint/no-non-null-assertion
+        core.addPath(path.join(process.env["HOME"]!, ".cargo", "bin")); // eslint-disable-line @typescript-eslint/no-non-null-assertion
 
         // Assuming it is in the $PATH already
         return new RustUp("rustup");
@@ -140,8 +140,10 @@ export class RustUp {
     public async activeToolchain(): Promise<string> {
         const stdout = await this.callStdout(["show", "active-toolchain"]);
 
-        if (stdout) {
-            return stdout.split(" ", 2)[0];
+        const split = stdout?.split(" ", 2)[0];
+
+        if (split) {
+            return split;
         } else {
             throw new Error("Unable to determine active toolchain");
         }
@@ -183,7 +185,13 @@ expected at least ${PROFILES_MIN_VERSION}`);
     public async version(): Promise<string> {
         const stdout = await this.callStdout(["-V"]);
 
-        return stdout.split(" ")[1];
+        const split = stdout?.split(" ")[1];
+
+        if (split) {
+            return split;
+        } else {
+            throw new Error("Unable to determine version");
+        }
     }
 
     // rustup which `program`
