@@ -1,7 +1,7 @@
 {
   "private": false,
   "name": "@open-actions-rs/core",
-  "version": "0.1.9",
+  "version": "0.1.10",
   "author": "open-actions-rs",
   "license": "MIT",
   "description": "Core functionality for the @open-actions-rs repos",
