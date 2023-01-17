@@ -10,7 +10,7 @@ import type { CratesIO } from "../schema";
 
 export async function resolveVersion(crate: string): Promise<string> {
     const url = `https://crates.io/api/v1/crates/${crate}`;
-    const client = new http.HttpClient("@actions-rs (https://github.com/actions-rs-plus/)");
+    const client = new http.HttpClient("@actions-rs (https://github.com/open-actions-rs/)");
 
     const resp = await client.getJson<CratesIO>(url);
 
