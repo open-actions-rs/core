@@ -10,7 +10,7 @@ import type { CratesIO } from "../schema";
 
 export async function resolveVersion(crate: string): Promise<string> {
     const url = `https://crates.io/api/v1/crates/${crate}`;
-    const client = new http.HttpClient("@actions-rs (https://github.com/actions-rs-plus/)");
+    const client = new http.HttpClient("@actions-rs (https://github.com/open-actions-rs/)");
 
     const resp = await client.getJson<CratesIO>(url);
 
@@ -33,8 +33,7 @@ export class Cargo {
 
             return new Cargo(path_to_cargo);
         } catch (error) {
-            core.error("cargo is not installed by default for some virtual environments, \
-see https://help.github.com/en/articles/software-in-virtual-environments-for-github-actions");
+            core.error("cargo is not installed by default for some virtual environments, see https://help.github.com/en/articles/software-in-virtual-environments-for-github-actions");
             core.error("To install it, use this action: https://github.com/actions-rs/toolchain");
 
             throw error;
